@@ -4,50 +4,76 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
+/* Ensure the container does not push content out of view */
 .container {
-    width: 80%;
+    width: 90%;
     max-width: 1200px;
     background: white;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
+    margin-top: 20px;
 }
 
-h2 {
-    color: #333;
-    font-size: 28px;
+/* Prevent stock info from pushing other elements too far */
+.stock-table {
+    width: 60%;
+    margin: 10px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-input {
-    width: 100%;
-    padding: 15px;
-    margin-top: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+.stock-table th, .stock-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
 }
 
+.stock-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.stock-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.stock-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Fix the stock price chart position */
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Fix buttons so they stay visible */
 button {
     background: #007bff;
     color: white;
     border: none;
-    padding: 15px 25px;
+    padding: 10px 15px;
     cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
-    margin-top: 15px;
+    margin: 10px;
 }
 
 button:hover {
     background: #0056b3;
 }
 
+/* Ensure tooltips display properly */
 .tooltip {
     position: relative;
     display: inline-block;
@@ -62,7 +88,7 @@ button:hover {
     padding: 8px;
     border-radius: 5px;
     position: absolute;
-    z-index: 1;
+    z-index: 10;
     bottom: 120%;
     left: 50%;
     transform: translateX(-50%);
@@ -74,11 +100,6 @@ button:hover {
 .tooltip:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
-}
-
-canvas {
-    width: 100% !important;
-    height: auto !important;
 }
 
 .stock-table {
@@ -107,5 +128,22 @@ canvas {
 
 .stock-table tr:hover {
     background-color: #f1f1f1;
+}
+
+/* Fix the input field width and appearance */
+input[type="text"] {
+    width: 100%;
+    max-width: 400px; /* Ensures it doesn't stretch too much */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    text-align: center;
+}
+
+/* Ensure form elements are properly spaced */
+form {
+    margin-top: 15px;
 }
 

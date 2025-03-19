@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Fetch Stock Information
     document.getElementById("stockInfo").addEventListener("click", function() {
         const ticker = document.getElementById("ticker").value;
-    
+
         fetch("/stock_info", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -92,9 +92,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     <tr><th>52 Week Low</th><td>${data["52 Week Low"]}</td></tr>
                 </table>
             `;
-    
-            document.getElementById("stockDetails").innerHTML = stockInfoHTML;
+
+            stockDetailsDiv.innerHTML = stockInfoHTML;
         });
     });
-    
 });

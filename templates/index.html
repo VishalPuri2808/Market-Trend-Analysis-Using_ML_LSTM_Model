@@ -12,17 +12,12 @@
     <div class="container text-center mt-5">
         <h2>Stock Price Prediction</h2>
         <form id="stockForm">
-            <input type="text" id="ticker" name="ticker" class="form-control mt-3" placeholder="Enter Stock Ticker (e.g., GOOG, TSLA)" required>
-            <button type="submit" class="btn btn-primary mt-3">Predict</button>
-
-            <div class="tooltip">
-                <button type="button" id="predictTrend" class="btn btn-warning mt-3" data-tooltip="Predict if the stock will go UP or DOWN tomorrow.">Predict Tomorrow's Trend</button>
-                <span class="tooltip-text" id="tooltip-trend"></span>
-            </div>
-
-            <div class="tooltip">
-                <button type="button" id="stockInfo" class="btn btn-info mt-3" data-tooltip="View stock details like Market Cap, PE Ratio, and more.">Stock Information</button>
-                <span class="tooltip-text" id="tooltip-info"></span>
+            <input type="text" id="ticker" name="ticker" class="form-control mt-3"
+        placeholder="Enter Stock Ticker (e.g., GOOG, TSLA)" required>
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary mt-3">Predict</button>
+                <button type="button" id="predictTrend" class="btn btn-warning mt-3">Predict Tomorrow's Trend</button>
+                <button type="button" id="stockInfo" class="btn btn-info mt-3">Stock Information</button>
             </div>
         </form>
         
