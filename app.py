@@ -8,7 +8,7 @@ import yfinance as yf
 app = Flask(__name__)
 
 # Load pre-trained LSTM model
-model = tf.keras.models.load_model("lstm_stock_model.h5")  # Load from directory
+model = tf.keras.models.load_model("lstm_stock_model.h5")
 
 # Function to fetch stock data
 def get_stock_data(ticker):
@@ -59,8 +59,38 @@ def predict():
         'dates': prediction_dates.strftime('%m/%d/%Y').tolist()
     })
 
+@app.route('/predict_trend', methods=['POST'])
+def predict_trend():
+    ticker = request.form['ticker']
+    stock_data = get_stock_data(ticker)
 
+    scaled_data, scaler = preprocess_data(stock_data)
+    X_test = prepare_input(scaled_data, scaler)
 
+    predictions = model.predict(X_test)
+    
+    tomorrow_pred = predictions[-1][0]
+    today_price = stock_data['Close'].values[-1]
+
+    trend = "UP" if tomorrow_pred > today_price else "DOWN"
+
+    return jsonify({'trend': trend, 'tomorrow_price': round(float(tomorrow_pred), 2)})
+
+@app.route('/stock_info', methods=['POST'])
+def stock_info():
+    ticker = request.form['ticker']
+    stock = yf.Ticker(ticker)
+    info = stock.info
+
+    stock_details = {
+        "Company Name": info.get("longName", "N/A"),
+        "Market Cap": info.get("marketCap", "N/A"),
+        "PE Ratio": info.get("trailingPE", "N/A"),
+        "52 Week High": info.get("fiftyTwoWeekHigh", "N/A"),
+        "52 Week Low": info.get("fiftyTwoWeekLow", "N/A"),
+    }
+
+    return jsonify(stock_details)
 
 if __name__ == '__main__':
     app.run(debug=True)
