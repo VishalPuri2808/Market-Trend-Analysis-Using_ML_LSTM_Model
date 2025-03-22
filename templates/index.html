@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,27 +9,53 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
     <div class="container text-center mt-5">
         <h2>Stock Price Prediction</h2>
-        <form id="stockForm">
-            <input type="text" id="ticker" name="ticker" class="form-control mt-3"
-        placeholder="Enter Stock Ticker (e.g., GOOG, TSLA)" required>
-            <div class="button-group">
-                <button type="submit" class="btn btn-primary mt-3">Predict</button>
-                <button type="button" id="predictTrend" class="btn btn-warning mt-3">Predict Tomorrow's Trend</button>
-                <button type="button" id="stockInfo" class="btn btn-info mt-3">Stock Information</button>
+        <div class="main-content">
+            <div class="left-section">
+                <form id="stockForm">
+                    <input type="text" id="ticker" name="ticker" class="form-control mt-3"
+                        placeholder="Enter Stock Ticker (e.g., GOOG, TSLA)" required>
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary mt-3">Predict</button>
+                        <button type="button" id="predictTrend" class="btn btn-warning mt-3">Predict Tomorrow's
+                            Trend</button>
+                        <button type="button" id="stockInfo" class="btn btn-info mt-3">Stock Information</button>
+                    </div>
+                </form>
+
+                <!-- Error Message Display -->
+                <div id="errorMessage" class="text-center mt-3" style="color:red; display: none;"></div>
+
+                <!-- Loading Spinner (Optional) -->
+                <div id="loadingSpinner" class="text-center mt-3" style="display: none;">
+                    <img src="{{ url_for('static', filename='spinner.gif') }}" alt="Loading..." width="50">
+                </div>
+
+                <div id="todayPrediction" class="text-center mt-4"></div>
+                <div id="trendPrediction" class="text-center mt-4"></div>
+                <div id="stockDetails" class="text-center mt-4"></div>
+
             </div>
-        </form>
-        
-        <div id="todayPrediction" class="text-center mt-4"></div>
-        <div id="trendPrediction" class="text-center mt-4"></div>
-        <div id="stockDetails" class="text-center mt-4"></div>
-        <div id="result" class="mt-4">
-            <canvas id="stockChart"></canvas>
+
+            <div class="right-section">
+
+                <!-- Stock Chart Container -->
+                <div id="result" class="mt-4">
+                    <canvas id="stockChart"></canvas>
+                </div>
+            </div>
         </div>
+
+        <div id = "downSec" class="mt-4">
+            
+            <div id="sentiment" class="text-center mt-4"></div>
+        </div>    
     </div>
-    
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+
 </html>

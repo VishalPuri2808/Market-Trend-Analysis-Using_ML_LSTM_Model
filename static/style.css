@@ -13,13 +13,27 @@ body {
 /* Ensure the container does not push content out of view */
 .container {
     width: 90%;
-    max-width: 1200px;
-    background: white;
+    max-width: 1600px;
+    background: rgba(210, 210, 210, 0.71);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     margin-top: 20px;
+}
+.main-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-section {
+    width: 40%;
+    padding-right: 20px;
+}
+
+.right-section {
+    width: 58%;
 }
 
 /* Prevent stock info from pushing other elements too far */
@@ -103,7 +117,7 @@ button:hover {
 }
 
 .stock-table {
-    width: 60%;
+    width: 90%;
     margin: 10px auto;
     border-collapse: collapse;
     background-color: #fff;
@@ -140,6 +154,8 @@ input[type="text"] {
     border-radius: 5px;
     outline: none;
     text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
 }
 
 /* Ensure form elements are properly spaced */
@@ -147,3 +163,61 @@ form {
     margin-top: 15px;
 }
 
+h2 {
+    color: #333;
+    font-size: 28px;
+}
+
+input {
+    width: 80%;
+    padding: 10px;
+    margin-top: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+#sentiment, #result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #e4e4e4;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    background: #f9f9f9;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.left-section {
+    width: 40%;
+    padding-right: 20px;
+}
+
+.right-section {
+    width: 58%;
+}
