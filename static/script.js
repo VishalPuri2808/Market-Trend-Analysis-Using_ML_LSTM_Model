@@ -13,27 +13,26 @@ document.addEventListener("DOMContentLoaded", function() {
         predictStockPrice();
     });
 
-    // Tooltip Functionality
     document.querySelectorAll(".tooltip button").forEach(button => {
         const tooltipText = button.getAttribute("data-tooltip");
         const tooltipSpan = button.nextElementSibling;
         tooltipSpan.innerText = tooltipText;
     });
-    // Predict Tomorrow's Trend
-    document.getElementById("predictTrend").addEventListener("click", function() {
-        const ticker = document.getElementById("ticker").value;
 
-        fetch("/predict_trend", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `ticker=${ticker}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            trendPrediction.innerHTML = `<h3>Tomorrow's Trend: ${data.trend} (Predicted Price: $${data.tomorrow_price})</h3>`;
-        });
-    });
-    // Fetch Stock Information 
+    // document.getElementById("predictTrend").addEventListener("click", function() {
+    //     const ticker = document.getElementById("ticker").value;
+
+    //     fetch("/predict_trend", {
+    //         method: "POST",
+    //         headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    //         body: `ticker=${ticker}`
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         trendPrediction.innerHTML = `<h3>Tomorrow's Trend: ${data.trend} (Predicted Price: $${data.tomorrow_price})</h3>`;
+    //     });
+    // });
+
     document.getElementById("stockInfo").addEventListener("click", function() {
         const ticker = document.getElementById("ticker").value;
 
@@ -54,10 +53,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     <tr><th>52 Week Low</th><td>${data["52 Week Low"]}</td></tr>
                 </table>
             `;
-
             stockDetails.innerHTML = stockInfoHTML;
         });
-    });    
+    });
+
     function predictStockPrice() {
         const ticker = document.getElementById("ticker").value.trim();
         fetch("/predict", {
@@ -65,7 +64,12 @@ document.addEventListener("DOMContentLoaded", function() {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: `ticker=${ticker}`
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.error) {
                 resultDiv.innerHTML = `<h3 style='color:red;'>Error: ${data.error}</h3>`;
@@ -75,10 +79,8 @@ document.addEventListener("DOMContentLoaded", function() {
             const predictions = data.predictions;
             const actualPrices = data.actual;
             const dates = data.dates;
-            const todayPrediction = predictions[predictions.length - 1][0];
-            const todayDate = dates[dates.length - 1];
 
-            todayPredictionDiv.innerHTML = `<h3>Predicted Price: $${data.predicted_price}</h3>`;
+            todayPredictionDiv.innerHTML = `<h3>Today's Predicted Price: $${data.predicted_price}</h3>`;
             sentimentDiv.innerHTML = `<h3>Market Sentiment: ${data.sentiment_score >= 0 ? 'Positive' : 'Negative'} (${data.sentiment_score})</h3>`;
 
             let newsHTML = "<h3>Recent News</h3><ul>";
@@ -92,41 +94,48 @@ document.addEventListener("DOMContentLoaded", function() {
             if (stockChartInstance) stockChartInstance.destroy();
 
             stockChartInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: data.dates,
-        datasets: [
-            {
-                label: 'Actual Prices',
-                data: data.actual.map(a => typeof a === 'number' ? a : a[0]),
-                borderColor: 'blue',
-                fill: false
-            },
-            {
-                label: 'Predicted Prices',
-                data: data.predictions.map(p => typeof p === 'number' ? p : p[0]),  // Flatten if needed
-                borderColor: 'green',
-                fill: false
-            }
-            
-        ]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            x: { title: { display: true, text: 'Date (MM/DD/YYYY)' } },
-            y: { title: { display: true, text: 'Stock Price (USD)' } }
-        }
-    }
-});
-
-        console.log("Actual Prices:", data.actual);
-        console.log("Predicted Prices:", data.predictions);
-
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Actual Prices',
+                            data: actualPrices.map(p => p[0]),
+                            borderColor: 'blue',
+                            fill: false,
+                            pointRadius: 3,
+                            pointBackgroundColor: 'blue',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Predicted Prices',
+                            data: predictions,
+                            borderColor: 'green',
+                            fill: false,
+                            pointRadius: 3,
+                            pointBackgroundColor: 'green',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Date (MM/DD/YYYY)' },
+                            ticks: { autoSkip: true, maxTicksLimit: 20 }
+                        },
+                        y: {
+                            title: { display: true, text: 'Stock Price (USD)' },
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
         })
         .catch(error => {
             console.error("Error fetching prediction:", error);
-            resultDiv.innerHTML = `<h3 style='color:red;'>Error fetching prediction</h3>`;
+            resultDiv.innerHTML = `<h3 style='color:red;'>Error fetching prediction: ${error.message}</h3>`;
         });
     }
 });
